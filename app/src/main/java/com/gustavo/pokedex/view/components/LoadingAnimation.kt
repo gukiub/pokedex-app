@@ -15,12 +15,12 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.gustavo.pokedex.R
 
 @Composable
-fun LoadingAnimation() {
+fun LoadingAnimation(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.pokeball_loading_animation))
     val progress by animateLottieCompositionAsState(composition)
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         LottieAnimation(

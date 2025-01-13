@@ -1,9 +1,9 @@
 package com.gustavo.pokedex.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,17 +27,17 @@ import com.gustavo.pokedex.util.getTypeColor
 @Composable
 fun PokedexItem(pokemon: Pokemon) {
     Card(
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF2F3F4)),
+        elevation = CardDefaults.cardElevation(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .background(Color(0xFFF2F3F4), shape = RoundedCornerShape(32.dp)),
-        elevation = CardDefaults.cardElevation(8.dp)
+            .padding(16.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Imagem
             AsyncImage(
                 model = pokemon.imageUrl,
                 contentDescription = "Pokemon Image",
@@ -48,20 +48,24 @@ fun PokedexItem(pokemon: Pokemon) {
                 contentScale = ContentScale.Crop
             )
 
-            // ID e Nome
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
-                text = "N°${pokemon.formattedId()}",
+                text = pokemon.formattedId(),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray,
-                modifier = Modifier.padding(top = 8.dp)
+                color = Color.Gray
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
             Text(
                 text = pokemon.formattedName,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(vertical = 8.dp)
+                textAlign = TextAlign.Center
             )
 
-            // Tipos
+            Spacer(modifier = Modifier.height(16.dp))
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -78,16 +82,14 @@ fun PokedexItem(pokemon: Pokemon) {
 fun PokemonTypeBadge(type: String) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        colors = CardDefaults.cardColors(containerColor = getTypeColor(type)),
     ) {
         Text(
             text = type.uppercase(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(getTypeColor(type))
-                .padding(vertical = 8.dp),
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.White,
             textAlign = TextAlign.Center,
-            color = Color.White
+            modifier = Modifier.padding(vertical = 8.dp)
         )
     }
 }

@@ -11,9 +11,9 @@ import androidx.compose.ui.unit.dp
 import com.gustavo.pokedex.model.Pokemon
 
 @Composable
-fun PokemonList(pokemons: List<Pokemon>) {
+fun PokemonList(modifier: Modifier = Modifier, pokemons: List<Pokemon>) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {

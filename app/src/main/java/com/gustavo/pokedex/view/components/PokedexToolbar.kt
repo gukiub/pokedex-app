@@ -26,7 +26,9 @@ fun PokedexToolbar() {
                 text = "POKEDEX",
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
                 textAlign = TextAlign.Center
             )
         },
@@ -35,9 +37,9 @@ fun PokedexToolbar() {
                 painter = painterResource(id = R.drawable.icon_pokebola),
                 contentDescription = "Pokebola Icon",
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(start = 16.dp)
                     .size(32.dp),
-                tint = Color.White
+                tint = Color.Unspecified
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF8B0000))
