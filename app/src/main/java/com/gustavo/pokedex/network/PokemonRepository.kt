@@ -5,19 +5,13 @@ import com.gustavo.pokedex.model.PokemonsApiResult
 import com.gustavo.pokedex.util.Constants.Companion.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object PokemonRepository {
+@Singleton
+class PokemonRepository @Inject constructor(
     private val service: PokemonService
-
-    init {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        service = retrofit.create(PokemonService::class.java)
-    }
-
+) {
     fun listPokemons(limit: Int = 151): PokemonsApiResult? {
         val call = service.listPokemons(limit)
         return call.execute().body()

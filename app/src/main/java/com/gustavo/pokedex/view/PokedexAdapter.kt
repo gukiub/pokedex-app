@@ -1,4 +1,4 @@
-package com.gustavo.pokedex.list
+package com.gustavo.pokedex.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -30,10 +30,10 @@ import com.gustavo.pokedex.util.typeEnum.steel
 import com.gustavo.pokedex.util.typeEnum.water
 import java.util.*
 
-class PokemonAdapter(
+class PokedexAdapter(
     private val values: List<Pokemon?>,
     private val context: Context
-) : RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PokedexAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
