@@ -67,11 +67,14 @@ fun PokedexItem(pokemon: Pokemon) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 pokemon.types.forEach { type ->
-                    PokemonTypeBadge(type.name)
+                    PokemonTypeBadge(
+                        type = type.name,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }
@@ -79,17 +82,20 @@ fun PokedexItem(pokemon: Pokemon) {
 }
 
 @Composable
-fun PokemonTypeBadge(type: String) {
+fun PokemonTypeBadge(type: String, modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = getTypeColor(type)),
+        modifier = modifier.padding(horizontal = 8.dp)
     ) {
         Text(
             text = type.uppercase(),
             style = MaterialTheme.typography.bodyMedium,
             color = Color.White,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
         )
     }
 }
