@@ -2,23 +2,49 @@ package com.gustavo.pokedex.network
 
 import com.gustavo.pokedex.model.PokemonApiResult
 import com.gustavo.pokedex.model.PokemonsApiResult
-import com.gustavo.pokedex.util.Constants.Companion.BASE_URL
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.gustavo.pokedex.network.call.networkCall
+import com.gustavo.pokedex.network.interfaces.NetworkResult
+import kotlinx.coroutines.Dispatchers
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class PokemonRepository @Inject constructor(
     private val service: PokemonService
-) {
-    fun listPokemons(limit: Int = 151): PokemonsApiResult? {
-        val call = service.listPokemons(limit)
-        return call.execute().body()
+) : PokemonServiceImpl {
+    override fun listPokemons(
+        limit: Int,
+        onResult: (PokemonsApiResult?) -> Unit,
+        onError: (Throwable) -> Unit,
+        isLoading: (Boolean) -> Unit
+    ) {
+        networkCall(dispatcher = Dispatchers.Default, call = {
+            service.listPokemons(limit)
+        }, onResult = { result ->
+            when (result) {
+                is NetworkResult.Success -> onResult(result.data)
+                is NetworkResult.FailureWithMessage -> onError(Exception(result.errorMessage))
+                is NetworkResult.NetworkError -> onError(IOException("Erro de rede"))
+                else -> onError(Exception("Erro desconhecido"))
+            }
+        }, isLoading = isLoading)
     }
 
-    fun getPokemon(number: Int): PokemonApiResult? {
-        val call = service.getPokemon(number)
-        return call.execute().body()
+    override fun getPokemon(
+        number: Int,
+        onResult: (PokemonApiResult?) -> Unit,
+        onError: (Throwable) -> Unit,
+        isLoading: (Boolean) -> Unit
+    ) {
+        networkCall(dispatcher = Dispatchers.Default, call = {
+            service.getPokemon(number)
+        }, onResult = { result ->
+            when (result) {
+                is NetworkResult.Success -> onResult(result.data)
+                is NetworkResult.FailureWithMessage -> onError(Exception(result.errorMessage))
+                NetworkResult.NetworkError -> onError(Exception("Erro desconhecido"))
+            }
+        }, isLoading = isLoading)
     }
 }

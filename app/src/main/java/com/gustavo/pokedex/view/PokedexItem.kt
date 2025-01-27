@@ -61,7 +61,8 @@ fun PokedexItem(pokemon: Pokemon) {
             Text(
                 text = pokemon.formattedName,
                 style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color.DarkGray
             )
 
             Spacer(modifier = Modifier.height(16.dp))

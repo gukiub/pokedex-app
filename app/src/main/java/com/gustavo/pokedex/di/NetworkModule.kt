@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.gustavo.pokedex.network.PokemonService
 import com.gustavo.pokedex.network.factory.createGsonInstance
 import com.gustavo.pokedex.network.factory.createOkHttpClient
+import com.gustavo.pokedex.util.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,8 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    private const val BASE_URL = "https://pokeapi.co/api/v2/"
 
     @Provides
     @Singleton
