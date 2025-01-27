@@ -36,39 +36,46 @@ class PokedexViewModel @Inject constructor(
         pokemonUseCase.listPokemons(
             limit = limit,
             onResult = { pokemonsApiResult ->
-                pokemonsApiResult?.let {
-                    val loadedPokemons = it.results.mapNotNull { pokemonResult ->
+                pokemonsApiResult?.let { apiResult ->
+                    val pokemonMap = mutableMapOf<Int, Pokemon?>()
+
+                    apiResult.results.forEach { pokemonResult ->
                         val number = pokemonResult.url
                             .replace("https://pokeapi.co/api/v2/pokemon/", "")
                             .replace("/", "").toInt()
 
-                        var pokemon: Pokemon? = null
+                        pokemonMap[number] = null
+
                         pokemonUseCase.getPokemon(
                             number = number,
                             onResult = { pokemonApiResult ->
-                                pokemon = pokemonApiResult?.let { result ->
-                                    Pokemon(
+                                pokemonApiResult?.let { result ->
+                                    val pokemon = Pokemon(
                                         id = result.id,
                                         name = result.name,
                                         types = result.types.map { it.type }
                                     )
+
+                                    pokemonMap[number] = pokemon
+
+                                    _pokemons.value = pokemonMap.toSortedMap().values.filterNotNull()
                                 }
                             },
                             onError = { throwable ->
-                                _error.value = throwable.message
+                                _error.value = "Erro ao carregar Pokémon: ${throwable.message}"
                             },
                             isLoading = {}
                         )
-                        pokemon
                     }
-                    _pokemons.value = loadedPokemons
                 } ?: run {
                     _pokemons.value = emptyList()
+                    _error.value = "Nenhum Pokémon encontrado."
                 }
+
                 _isLoading.value = false
             },
             onError = { throwable ->
-                _error.value = throwable.message
+                _error.value = "Erro ao carregar Pokémons: ${throwable.message}"
                 _isLoading.value = false
             },
             isLoading = { isLoading ->

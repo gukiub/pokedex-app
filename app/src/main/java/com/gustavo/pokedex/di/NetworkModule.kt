@@ -4,28 +4,18 @@ import com.google.gson.Gson
 import com.gustavo.pokedex.network.PokemonService
 import com.gustavo.pokedex.network.factory.createGsonInstance
 import com.gustavo.pokedex.network.factory.createOkHttpClient
+import com.gustavo.pokedex.network.retrofit.createRetrofitService
 import com.gustavo.pokedex.util.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     @Provides
     fun provideGsonInstance(): Gson {
@@ -39,7 +29,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePokemonService(retrofit: Retrofit): PokemonService {
-        return retrofit.create(PokemonService::class.java)
+    fun providePokemonService(): PokemonService {
+        return createRetrofitService(
+            createGsonInstance(),
+            createOkHttpClient(),
+            PokemonService::class.java,
+            BASE_URL
+        )
     }
 }

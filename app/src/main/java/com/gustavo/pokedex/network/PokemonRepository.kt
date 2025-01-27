@@ -1,5 +1,6 @@
 package com.gustavo.pokedex.network
 
+import android.util.Log
 import com.gustavo.pokedex.model.PokemonApiResult
 import com.gustavo.pokedex.model.PokemonsApiResult
 import com.gustavo.pokedex.network.call.networkCall
@@ -13,6 +14,10 @@ import javax.inject.Singleton
 class PokemonRepository @Inject constructor(
     private val service: PokemonService
 ) : PokemonServiceImpl {
+    companion object {
+        private const val TAG = "PokemonRepository"
+    }
+
     override fun listPokemons(
         limit: Int,
         onResult: (PokemonsApiResult?) -> Unit,
@@ -23,10 +28,22 @@ class PokemonRepository @Inject constructor(
             service.listPokemons(limit)
         }, onResult = { result ->
             when (result) {
-                is NetworkResult.Success -> onResult(result.data)
-                is NetworkResult.FailureWithMessage -> onError(Exception(result.errorMessage))
-                is NetworkResult.NetworkError -> onError(IOException("Erro de rede"))
-                else -> onError(Exception("Erro desconhecido"))
+                is NetworkResult.Success -> {
+                    Log.d(TAG, "api fetched successfully: $result")
+                    onResult(result.data)
+                }
+                is NetworkResult.FailureWithMessage -> {
+                    Log.e(TAG, "api fetch failed: $result")
+                    onError(Exception(result.errorMessage))
+                }
+                is NetworkResult.NetworkError -> {
+                    Log.e(TAG, "api fetch failed: $result")
+                    onError(IOException("Erro de rede"))
+                }
+                else -> {
+                    Log.w(TAG, "unknown error: $result")
+                    onError(Exception("Erro desconhecido"))
+                }
             }
         }, isLoading = isLoading)
     }
@@ -41,9 +58,22 @@ class PokemonRepository @Inject constructor(
             service.getPokemon(number)
         }, onResult = { result ->
             when (result) {
-                is NetworkResult.Success -> onResult(result.data)
-                is NetworkResult.FailureWithMessage -> onError(Exception(result.errorMessage))
-                NetworkResult.NetworkError -> onError(Exception("Erro desconhecido"))
+                is NetworkResult.Success -> {
+                    Log.d(TAG, "api fetched successfully: $result")
+                    onResult(result.data)
+                }
+                is NetworkResult.FailureWithMessage -> {
+                    Log.e(TAG, "api fetch failed: $result")
+                    onError(Exception(result.errorMessage))
+                }
+                is NetworkResult.NetworkError -> {
+                    Log.e(TAG, "api fetch failed: $result")
+                    onError(IOException("Erro de rede"))
+                }
+                else -> {
+                    Log.w(TAG, "unknown error: $result")
+                    onError(Exception("Erro desconhecido"))
+                }
             }
         }, isLoading = isLoading)
     }
