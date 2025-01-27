@@ -20,28 +20,31 @@ class PokemonRepository @Inject constructor(
 
     override fun listPokemons(
         limit: Int,
+        offset: Int,
         onResult: (PokemonsApiResult?) -> Unit,
         onError: (Throwable) -> Unit,
         isLoading: (Boolean) -> Unit
     ) {
+        Log.d(TAG, "Solicitando Pokémons com limit=$limit e offset=$offset")
+
         networkCall(dispatcher = Dispatchers.Default, call = {
-            service.listPokemons(limit)
+            service.listPokemons(limit, offset)
         }, onResult = { result ->
             when (result) {
                 is NetworkResult.Success -> {
-                    Log.d(TAG, "api fetched successfully: $result")
+                    Log.d(TAG, "Pokémons recebidos: ${result.data?.results?.size}")
                     onResult(result.data)
                 }
                 is NetworkResult.FailureWithMessage -> {
-                    Log.e(TAG, "api fetch failed: $result")
+                    Log.e(TAG, "Erro na API: ${result.errorMessage}")
                     onError(Exception(result.errorMessage))
                 }
                 is NetworkResult.NetworkError -> {
-                    Log.e(TAG, "api fetch failed: $result")
+                    Log.e(TAG, "Erro de rede")
                     onError(IOException("Erro de rede"))
                 }
                 else -> {
-                    Log.w(TAG, "unknown error: $result")
+                    Log.w(TAG, "Erro desconhecido")
                     onError(Exception("Erro desconhecido"))
                 }
             }

@@ -62,7 +62,12 @@ fun PokedexScreenContent(
         if (pokemons.isEmpty()) {
             LoadingAnimation(modifier = Modifier.fillMaxSize())
         } else {
-            PokemonList(modifier = Modifier.fillMaxSize(), pokemons = pokemons)
+            PokemonList(
+                modifier = Modifier.fillMaxSize(),
+                pokemons = pokemons,
+                onLoadMore = { viewModel.loadPokemons() },
+                isLoading = viewModel.isLoading.collectAsState().value
+            )
         }
     }
 }

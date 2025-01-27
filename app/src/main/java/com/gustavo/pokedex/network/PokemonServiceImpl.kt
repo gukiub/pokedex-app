@@ -6,6 +6,7 @@ import com.gustavo.pokedex.model.PokemonsApiResult
 interface PokemonServiceImpl {
     fun listPokemons(
         limit: Int = 151,
+        offset: Int = 0,
         onResult: (PokemonsApiResult?) -> Unit,
         onError: (Throwable) -> Unit,
         isLoading: (Boolean) -> Unit

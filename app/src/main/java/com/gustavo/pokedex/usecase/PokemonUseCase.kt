@@ -16,10 +16,12 @@ class PokemonUseCase @Inject constructor(private val repository: PokemonReposito
 
     fun listPokemons(
         limit: Int,
+        offset: Int,
         onResult: (PokemonsApiResult?) -> Unit,
         onError: (Throwable) -> Unit,
         isLoading: (Boolean) -> Unit
-    ) = repository.listPokemons(limit, onResult, onError, isLoading)
+    ) = repository.listPokemons(limit, offset, onResult, onError, isLoading)
+
 
     fun getPokemon(
         number: Int,
